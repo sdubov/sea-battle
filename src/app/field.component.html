@@ -1,15 +1,12 @@
 <h3>Field Component</h3>
 <div class="field">
 
-  <div class="field-ships">
-    Print field:
-    <table border="1px">
-      <tr *ngFor="let row of field.shoots">
-        <td *ngFor="let col of row" (click)="onCellClick(col.x, col.y)">
-          {{col.status}}
-        </td>
-      </tr>
-    </table>
-  </div>
+  <table>
+    <tr *ngFor="let row of field.shoots">
+      <td *ngFor="let col of row" (click)="onCellClick(col.x, col.y)">
+        <img src="{{getImageForStatus(col.status)}}">
+      </td>
+    </tr>
+  </table>
 
 </div>

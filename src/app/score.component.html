@@ -1,7 +1,13 @@
 <h3>Score Component</h3>
 
 <div class="score">
-  Score<br/>
-  Player 1: {{player.score}}<br/>
-  Player 2: 0
+  <div class="score-player1">
+    <div class="score-value">{{styleScore(player.score)}}</div>
+    <label class="player-label">player 1</label>
+  </div>
+  <div class="score-player2">
+    <div class="score-value">{{styleScore(0)}}</div>
+    <label class="player-label">player 2</label>
+  </div>
+
 </div>

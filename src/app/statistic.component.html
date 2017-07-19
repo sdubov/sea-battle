@@ -1,8 +1,26 @@
 <h3>Statistic Component</h3>
 
-<div class="statistics">
-  Print ships:
-  <li *ngFor="let ship of ships">
-    <span>Type: {{ship.type}}, Size: {{ship.size}}, Hits: {{ship.shoots}}</span>
-  </li>
+<div class="statistic">
+  <div *ngFor="let ship of ships">
+
+    <div class="ship">
+
+      <div class="ship-image">
+        <img src="{{getShipImagePath(ship.type)}}">
+      </div>
+
+      <div class="ship-hits">
+        <!-- Build hits -->
+        <div class="miss" *ngFor="let lifeIndex of [].constructor(ship.shoots)">
+          <img src="../assets/hit_small.png">
+        </div>
+        <!-- Build miss -->
+        <div class="miss" *ngFor="let lifeIndex of [].constructor(ship.size - ship.shoots)">
+          <img src="../assets/miss_small.png">
+        </div>
+      </div>
+
+    </div>
+
+  </div>
 </div>

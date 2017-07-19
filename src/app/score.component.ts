@@ -10,4 +10,10 @@ import { Player } from './model/player';
 export class ScoreComponent {
 
   @Input() player: Player;
+
+  styleScore(score: number): string {
+    return (score / 10)
+      .toFixed(1)
+      .replace('.','');
+  }
 }

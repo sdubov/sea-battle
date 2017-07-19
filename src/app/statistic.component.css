@@ -1,1 +1,27 @@
+.statistic {
 
+}
+
+.statistic .ship {
+  display: table;
+}
+
+.statistic .ship .ship-image {
+  display: table-cell;
+}
+
+.statistic .ship .ship-image img {
+  width: 150px;
+}
+
+.statistic .ship .ship-hits {
+  display: table-cell;
+}
+
+.statistic .ship .ship-hits .miss {
+  display: table-cell;
+}
+
+.statistic .ship .ship-hits .miss img {
+  width: 20px;
+}

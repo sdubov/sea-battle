@@ -1,0 +1,35 @@
+.field {
+  margin: 0 0 0 0;
+  padding: 0;
+}
+.field table {
+  cursor: pointer;
+  position: relative;
+  left: 0;
+  background-color: #EEE;
+  margin: .5em;
+  padding: .3em .3em;
+  height: 1.6em;
+  border-radius: 3px;
+  border: solid 2px orange;
+  border-collapse: collapse;
+}
+
+.field tr {
+}
+
+.field td {
+  border: solid 1px lightgrey;
+  height: 1.6em;
+  width: 1.6em;
+}
+
+.field td:hover {
+  color: #607D8B;
+  background-color: #DDD;
+}
+
+.field td img {
+  width: 1.5em;
+  height: 1.5em;
+}

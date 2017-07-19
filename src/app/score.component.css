@@ -1,0 +1,23 @@
+.score {
+  width: 200px;
+  display: table;
+  text-align: center;
+  /*display: table-row;*/
+  /*display: table-header-group;*/
+}
+
+.score .score-player1 {
+  display: table-cell;
+  background-color: orange;
+  padding: 1em .5em 1em .5em;
+}
+
+.score .score-value {
+  border-bottom: solid 1px grey;
+}
+
+.score .score-player2 {
+  display: table-cell;
+  background-color: aqua;
+  padding: 1em .5em 1em .5em;
+}

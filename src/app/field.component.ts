@@ -99,4 +99,14 @@ export class FieldComponent implements OnInit {
     return ships.every((ship) => ship.isDead);
   }
 
+  getImageForStatus(status: number): string {
+    const map = {
+      0: '',
+      1: '../assets/miss.png',
+      2: '../assets/hit.png'
+    };
+
+    return map[status];
+  }
+
 }

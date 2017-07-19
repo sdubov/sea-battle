@@ -1,0 +1,8 @@
+<h3>Statistic Component</h3>
+
+<div class="statistics">
+  Print ships:
+  <li *ngFor="let ship of ships">
+    <span>Type: {{ship.type}}, Size: {{ship.size}}, Hits: {{ship.shoots}}</span>
+  </li>
+</div>

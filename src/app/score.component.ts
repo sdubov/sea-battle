@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { Player } from './model/player';
 
 @Component({
   selector: 'app-score',
@@ -7,4 +8,6 @@ import { Component } from '@angular/core';
 })
 
 export class ScoreComponent {
+
+  @Input() player: Player;
 }

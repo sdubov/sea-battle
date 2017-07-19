@@ -1,22 +1,6 @@
 <h3>Field Component</h3>
 <div class="field">
 
-  <div class="score">
-    Score<br/>
-    Player: {{player.score}}
-  </div>
-
-  <br/>
-
-  <div class="statistics">
-    Print ships:
-    <li *ngFor="let ship of field.ships">
-      <span>Type: {{ship.type}}, Size: {{ship.size}}, Hits: {{ship.shoots}}</span>
-    </li>
-  </div>
-
-  <br/>
-
   <div class="field-ships">
     Print field:
     <table border="1px">

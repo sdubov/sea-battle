@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Field } from './model/field';
 import { BattleService } from './service/battle.service';
 import { Ship } from './model/ship';
 import { Player } from './model/player';
-import {StatisticComponent} from "./statistic.component";
 
 @Component({
   selector: 'app-field',
@@ -13,15 +12,14 @@ import {StatisticComponent} from "./statistic.component";
 
 export class FieldComponent implements OnInit {
 
-  field: Field = null;
-  player: Player = null;
+  @Input() player: Player;
+  field: Field;
 
   // Get the initial game field array
   constructor(private battleService: BattleService) { }
 
   ngOnInit(): void {
-    this.field = this.battleService.getField();
-    this.player = new Player();
+    this.field = this.player.field;
   }
 
   onCellClick(row: number, column: number): void {

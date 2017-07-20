@@ -3,31 +3,38 @@ import { Headers, Http } from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
 
-import { Field } from '../model/field';
-import { MockField } from './mock-field';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class BattleService {
 
-  private battleUrl = 'api/battle';
-  private headers = new Headers({
-    'Content-Type': 'application/json'
-  });
+  private battleUrl = 'http://localhost:8080/';
 
   constructor(
     private http: Http
   ) { }
 
-  getField(): Field {
-    // return this.http.get(this.battleUrl)
-    //   .toPromise()
-    //   .then(response => response.json().data as string)
-    //   .catch(BattleService.handleError);
-    return new MockField().get();
+  startGame(): Promise<string> {
+
+    return this.http
+      .get(this.battleUrl)
+      .toPromise()
+      .then(resp => resp.json().status as string)
+      .catch(this.handleError);
   }
 
-  handleError(error: any): Promise<any> {
+  makeShoot(x: number, y: number): Promise<string> {
+
+    return this.http
+      .get(`${this.battleUrl}shoot?x=${x}&y=${y}`)
+      .toPromise()
+      .then(resp => resp.json().status as string)
+      .catch(this.handleError);
+  }
+
+  private handleError(error: any): Promise<any> {
     console.error('An error occurred', error);
     return Promise.reject(error.message || error);
   }
+
 }

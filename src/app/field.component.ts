@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Field } from './model/field';
 import { BattleService } from './service/battle.service';
-import { Ship } from './model/ship';
 import { Player } from './model/player';
 
 @Component({
@@ -15,7 +14,6 @@ export class FieldComponent implements OnInit {
   @Input() player: Player;
   field: Field;
 
-  // Get the initial game field array
   constructor(private battleService: BattleService) { }
 
   ngOnInit(): void {
@@ -24,63 +22,94 @@ export class FieldComponent implements OnInit {
 
   onCellClick(row: number, column: number): void {
     if (this.field.shoots[row][column].status === 1 || this.field.shoots[row][column].status === 2) { return; }
-    for (let shipIndex = 0; shipIndex < this.field.ships.length; shipIndex++) {
-      const ship = this.field.ships[shipIndex];
-      const shipCoordinates = ship.coordinates;
 
-      for (let coordinateIndex = 0; coordinateIndex < shipCoordinates.length; coordinateIndex++) {
-        const coordinate = shipCoordinates[coordinateIndex];
 
-        if (row === coordinate[0] && column === coordinate[1]) {
-          // We have shoot a ship
+    this.battleService.makeShoot(row, column).then(status => {
+
+      switch (status) {
+        case 'MISS':
+          this.field.shoots[row][column].status = 1;
+          break;
+
+        case 'HIT':
           this.field.shoots[row][column].status = 2;
-          ship.shoots++;
-          this.checkShipHit(ship);
-          const isWin = this.isWin(this.field.ships);
+          break;
 
-          if (isWin) {
-            this.player.win();
-            // TODO: Update to click a button that will re-start the game
-            this.field = this.battleService.getField();
-          }
+        case 'KILL':
+          this.field.shoots[row][column].status = 2;
+          this.frameWithMiss(row, column);
+          break;
 
-          return;
-        }
+        case 'WIN':
+          this.player.win();
       }
-    }
-    this.field.shoots[row][column].status = 1;
+    });
   }
 
-  private checkShipHit(ship: Ship): void {
-    if (ship.shoots !== ship.size) { return; }
+  // TODO: Update this method to get response form server with ship coordinates
+  private frameWithMiss(row: number, column: number): void {
+    let isVertical = true;
+    const shoots = this.field.shoots;
 
-    ship.isDead = true;
+    if ((column < 9 && shoots[row][column + 1].status === 2) ||
+      (column > 0 && shoots[row][column - 1].status === 2)) {
+      isVertical = false;
+    }
 
-    // We kill the ship - update all surrounding cells with 'miss' value = 1
     let min_x = 9;
     let min_y = 9;
     let max_x = 0;
     let max_y = 0;
 
-    for (let index = 0; index < ship.coordinates.length; index++) {
-      const coordinate = ship.coordinates[index];
-      const x = coordinate[0];
-      const y = coordinate[1];
+    // Get hit ship
+    if (isVertical) {
+      min_y = max_y = column;
 
-      if (x < min_x) {
-        min_x = x;
+      // Process top
+      let status = 2;
+      let indexX = row;
+      while (status === 2) {
+        min_x = indexX;
+        indexX--;
+        if (indexX < 0) { break; }
+        status = this.field.shoots[indexX][column].status;
       }
-      if (x > max_x) {
-        max_x = x;
+
+      // Process bottom
+      status = 2;
+      indexX = row;
+      while (status === 2) {
+        max_x = indexX;
+        indexX++;
+        if (indexX > 9) { break; }
+        status = this.field.shoots[indexX][column].status;
       }
-      if (y < min_y) {
-        min_y = y;
+    } else {
+
+      min_x = max_x = row;
+
+      // Process left
+      let status = 2;
+      let indexY = column;
+      while (status === 2) {
+        min_y = indexY;
+        indexY--;
+        if (indexY < 0) { break; }
+        status = this.field.shoots[row][indexY].status;
       }
-      if (y > max_y) {
-        max_y = y;
+
+      // Process right
+      status = 2;
+      indexY = column;
+      while (status === 2) {
+        max_y = indexY;
+        indexY++;
+        if (indexY > 9) { break; }
+        status = this.field.shoots[row][indexY].status;
       }
     }
 
+    // Frame the ship
     min_x = min_x - 1 < 0 ? 0 : min_x - 1;
     max_x = max_x + 1 > 9 ? 9 : max_x + 1;
     min_y = min_y - 1 < 0 ? 0 : min_y - 1;
@@ -93,10 +122,6 @@ export class FieldComponent implements OnInit {
         }
       }
     }
-  }
-
-  private isWin(ships: Ship[]): boolean {
-    return ships.every((ship) => ship.isDead);
   }
 
   getImageForStatus(status: number): string {

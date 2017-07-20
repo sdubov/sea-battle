@@ -15,6 +15,6 @@ export class GameComponent implements OnInit {
 
   ngOnInit(): void {
     this.player = new Player();
-    this.player.field = this.battleService.getField();
+    this.battleService.startGame();
   }
 }

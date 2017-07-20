@@ -6,7 +6,7 @@ export class Player {
 
   constructor() {
     this.score = 0;
-    this.field = null;
+    this.field = new Field();
   }
 
   win(): void {

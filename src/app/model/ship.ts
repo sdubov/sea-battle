@@ -4,13 +4,12 @@ export class Ship {
 
   type: ShipType;
   size: number;
-  coordinates: number[][];
   shoots: number;
   isDead: boolean;
 
-  constructor(type: ShipType, coordinates: number[][]) {
+  constructor(type: ShipType) {
     this.type = type;
-    switch (type) {
+    switch (this.type) {
       case 0: { this.size = 2; break; }
       case 1: { this.size = 3; break; }
       case 2: { this.size = 3; break; }
@@ -19,6 +18,5 @@ export class Ship {
     }
     this.shoots = 0;
     this.isDead = false;
-    this.coordinates = coordinates;
   }
 }

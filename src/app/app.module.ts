@@ -10,6 +10,7 @@ import { GameComponent } from './game.component';
 import { FieldComponent } from './field.component';
 import { StatisticComponent } from './statistic.component';
 import { ScoreComponent } from './score.component';
+import { AlertComponent } from './alert.component';
 
 // Service
 import { BattleService } from './service/battle.service';
@@ -26,6 +27,7 @@ import { BattleService } from './service/battle.service';
     FieldComponent,
     StatisticComponent,
     ScoreComponent,
+    AlertComponent
   ],
   providers: [ BattleService ],
   bootstrap: [ AppComponent ]

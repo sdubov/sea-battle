@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Headers, Http } from '@angular/http';
+import { Http } from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
-
-import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class BattleService {
@@ -23,10 +21,18 @@ export class BattleService {
       .catch(this.handleError);
   }
 
-  makeShoot(x: number, y: number): Promise<string> {
+  makeShoot(x: number, y: number): Promise<any> {
 
     return this.http
       .get(`${this.battleUrl}shoot?x=${x}&y=${y}`)
+      .toPromise()
+      .then(resp => resp.json())
+      .catch(this.handleError);
+  }
+
+  restartGame(): Promise<void> {
+    return this.http
+      .get(`${this.battleUrl}restart`)
       .toPromise()
       .then(resp => resp.json().status as string)
       .catch(this.handleError);
@@ -36,5 +42,4 @@ export class BattleService {
     console.error('An error occurred', error);
     return Promise.reject(error.message || error);
   }
-
 }

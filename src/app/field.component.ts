@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Field } from './model/field';
 import { BattleService } from './service/battle.service';
 import { Player } from './model/player';
+import { ShipType } from './model/ship-type';
 
 @Component({
   selector: 'app-field',
@@ -21,33 +22,57 @@ export class FieldComponent implements OnInit {
   }
 
   onCellClick(row: number, column: number): void {
-    if (this.field.shoots[row][column].status === 1 || this.field.shoots[row][column].status === 2) { return; }
+    if (this.field.shoots[row][column].status === 1 ||
+      this.field.shoots[row][column].status === 2) { return; }
 
+      // TODO: Need to get hits from service response and update the this.ships in Statistic Component
+      this.battleService.makeShoot(row, column).then(response => {
 
-    this.battleService.makeShoot(row, column).then(status => {
-
-      switch (status) {
+      switch (response.status) {
         case 'MISS':
           this.field.shoots[row][column].status = 1;
           break;
 
         case 'HIT':
           this.field.shoots[row][column].status = 2;
+          this.hitShip(this.getShipTypeFromResponse(response.shipType));
           break;
 
         case 'KILL':
           this.field.shoots[row][column].status = 2;
-          this.frameWithMiss(row, column);
+          this.hitShip(this.getShipTypeFromResponse(response.shipType));
+          this.frameKilledShip(row, column);
           break;
 
         case 'WIN':
+          alert(`Player ${this.player.name} win!`);
+          // const alert = new AlertComponent(this.player.name);
           this.player.win();
+          this.field = this.player.field;
+          this.battleService.restartGame();
+          return;
       }
     });
+
+    // TODO: Switch user
+  }
+
+  hitShip(shipType: ShipType): void {
+    this.player.ships.find(ship => ship.type === shipType).shoots++;
+  }
+
+  getImageForStatus(status: number): string {
+    const map = {
+      0: '',
+      1: '../assets/miss.png',
+      2: '../assets/hit.png'
+    };
+
+    return map[status];
   }
 
   // TODO: Update this method to get response form server with ship coordinates
-  private frameWithMiss(row: number, column: number): void {
+  private frameKilledShip(row: number, column: number): void {
     let isVertical = true;
     const shoots = this.field.shoots;
 
@@ -124,14 +149,25 @@ export class FieldComponent implements OnInit {
     }
   }
 
-  getImageForStatus(status: number): string {
-    const map = {
-      0: '',
-      1: '../assets/miss.png',
-      2: '../assets/hit.png'
-    };
+  // TODO: Make correct deserialization
+  private getShipTypeFromResponse(type: string): ShipType {
+    switch (type) {
+      case 'CARRIER':
+        return ShipType.carrier;
 
-    return map[status];
+      case 'BATTLESHIP':
+        return ShipType.battleship;
+
+      case 'CRUISER':
+        return ShipType.cruiser;
+
+      case 'SUBMARINE':
+        return ShipType.submarine;
+
+      case 'DESTROYER':
+        return ShipType.destroyer;
+    }
+
+    // TODO: throw
   }
-
 }

@@ -11,10 +11,11 @@ import { BattleService } from './service/battle.service';
 export class GameComponent implements OnInit {
 
   player: Player;
+
   constructor(private battleService: BattleService) { }
 
   ngOnInit(): void {
-    this.player = new Player();
+    this.player = new Player('Sergey');
     this.battleService.startGame();
   }
 }

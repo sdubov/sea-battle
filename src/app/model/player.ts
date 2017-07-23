@@ -3,26 +3,24 @@ import { Ship } from './ship';
 import { ShipType } from './ship-type';
 
 export class Player {
+  id: number;
   name: string;
-  score: number;
   field: Field;
   ships: Ship[];
 
-  constructor(name: string) {
+  constructor(id: number, name: string) {
+    this.id = id;
     this.name = name;
-    this.score = 0;
     this.field = new Field();
     this.ships = this.initializeShips();
   }
 
-  win(): void {
-    this.score++;
+  resetPlayer(): void {
     this.field = new Field();
     this.ships = this.initializeShips();
   }
 
-  initializeShips(): Ship[] {
-
+  private initializeShips(): Ship[] {
     return [
       new Ship(ShipType.carrier),
       new Ship(ShipType.battleship),

@@ -1,3 +1,19 @@
-<app-field [player]="player"></app-field>
-<app-score [player]="player"></app-score>
-<app-statistic [ships]="player.ships"></app-statistic>
+<h3></h3>
+
+<div class="join" *ngIf="!player">
+  <div>
+    <input [(ngModel)]="name" placeholder="name">
+  </div>
+  <button (click)="join()">Join</button>
+</div>
+
+<div *ngIf="player">
+  <h4>Game status:</h4>
+  <label>{{displayGameStatus(game.status)}}</label>
+  <br/>
+  <label>{{details}}</label>
+</div>
+
+<app-field [player]="player" *ngIf="player"></app-field>
+<app-score [game]="game" *ngIf="player"></app-score>
+<app-statistic [ships]="player.ships" *ngIf="player"></app-statistic>

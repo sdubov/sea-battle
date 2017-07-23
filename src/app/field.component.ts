@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Field } from './model/field';
 import { BattleService } from './service/battle.service';
 import { Player } from './model/player';
 import { ShipType } from './model/ship-type';
+import { CellStatus } from './model/cell-status';
 
 @Component({
   selector: 'app-field',
@@ -13,50 +13,41 @@ import { ShipType } from './model/ship-type';
 export class FieldComponent implements OnInit {
 
   @Input() player: Player;
-  field: Field;
 
   constructor(private battleService: BattleService) { }
 
   ngOnInit(): void {
-    this.field = this.player.field;
   }
 
   onCellClick(row: number, column: number): void {
-    if (this.field.shoots[row][column].status === 1 ||
-      this.field.shoots[row][column].status === 2) { return; }
 
-      // TODO: Need to get hits from service response and update the this.ships in Statistic Component
-      this.battleService.makeShoot(row, column).then(response => {
+    // We should not process the same cell twice. User should choose different cell.
+    if (this.player.field.shoots[row][column].status === CellStatus.miss ||
+      this.player.field.shoots[row][column].status === CellStatus.hit) { return; }
 
-      switch (response.status) {
+    // Process a player's shoot
+    this.battleService.makeShoot(this.player.id, row, column).then(response => {
+
+      switch (response.shootStatus) {
         case 'MISS':
-          this.field.shoots[row][column].status = 1;
+          this.player.field.shoots[row][column].status = CellStatus.miss;
           break;
 
         case 'HIT':
-          this.field.shoots[row][column].status = 2;
+          this.player.field.shoots[row][column].status = CellStatus.hit;
           this.hitShip(this.getShipTypeFromResponse(response.shipType));
           break;
 
         case 'KILL':
-          this.field.shoots[row][column].status = 2;
+          this.player.field.shoots[row][column].status = CellStatus.hit;
           this.hitShip(this.getShipTypeFromResponse(response.shipType));
           this.frameKilledShip(row, column);
           break;
-
-        case 'WIN':
-          alert(`Player ${this.player.name} win!`);
-          // const alert = new AlertComponent(this.player.name);
-          this.player.win();
-          this.field = this.player.field;
-          this.battleService.restartGame();
-          return;
       }
     });
-
-    // TODO: Switch user
   }
 
+  // Update a player's statistic for hit ship
   hitShip(shipType: ShipType): void {
     this.player.ships.find(ship => ship.type === shipType).shoots++;
   }
@@ -71,13 +62,13 @@ export class FieldComponent implements OnInit {
     return map[status];
   }
 
-  // TODO: Update this method to get response form server with ship coordinates
+  // Frame a killed ship with miss cells (ships cannot border each other)
   private frameKilledShip(row: number, column: number): void {
     let isVertical = true;
-    const shoots = this.field.shoots;
+    const shoots = this.player.field.shoots;
 
-    if ((column < 9 && shoots[row][column + 1].status === 2) ||
-      (column > 0 && shoots[row][column - 1].status === 2)) {
+    if ((column < 9 && shoots[row][column + 1].status === CellStatus.hit) ||
+      (column > 0 && shoots[row][column - 1].status === CellStatus.hit)) {
       isVertical = false;
     }
 
@@ -91,46 +82,46 @@ export class FieldComponent implements OnInit {
       min_y = max_y = column;
 
       // Process top
-      let status = 2;
+      let status = CellStatus.hit;
       let indexX = row;
-      while (status === 2) {
+      while (status === CellStatus.hit) {
         min_x = indexX;
         indexX--;
         if (indexX < 0) { break; }
-        status = this.field.shoots[indexX][column].status;
+        status = this.player.field.shoots[indexX][column].status;
       }
 
       // Process bottom
-      status = 2;
+      status = CellStatus.hit;
       indexX = row;
-      while (status === 2) {
+      while (status === CellStatus.hit) {
         max_x = indexX;
         indexX++;
         if (indexX > 9) { break; }
-        status = this.field.shoots[indexX][column].status;
+        status = this.player.field.shoots[indexX][column].status;
       }
     } else {
 
       min_x = max_x = row;
 
       // Process left
-      let status = 2;
+      let status = CellStatus.hit;
       let indexY = column;
-      while (status === 2) {
+      while (status === CellStatus.hit) {
         min_y = indexY;
         indexY--;
         if (indexY < 0) { break; }
-        status = this.field.shoots[row][indexY].status;
+        status = this.player.field.shoots[row][indexY].status;
       }
 
       // Process right
-      status = 2;
+      status = CellStatus.hit;
       indexY = column;
-      while (status === 2) {
+      while (status === CellStatus.hit) {
         max_y = indexY;
         indexY++;
         if (indexY > 9) { break; }
-        status = this.field.shoots[row][indexY].status;
+        status = this.player.field.shoots[row][indexY].status;
       }
     }
 
@@ -142,14 +133,13 @@ export class FieldComponent implements OnInit {
 
     for (let i = min_x; i <= max_x; i++) {
       for (let j = min_y; j <= max_y; j++) {
-        if (this.field.shoots[i][j].status !== 2) {
-          this.field.shoots[i][j].status = 1;
+        if (this.player.field.shoots[i][j].status !== CellStatus.hit) {
+          this.player.field.shoots[i][j].status = CellStatus.miss;
         }
       }
     }
   }
 
-  // TODO: Make correct deserialization
   private getShipTypeFromResponse(type: string): ShipType {
     switch (type) {
       case 'CARRIER':
@@ -167,7 +157,5 @@ export class FieldComponent implements OnInit {
       case 'DESTROYER':
         return ShipType.destroyer;
     }
-
-    // TODO: throw
   }
 }

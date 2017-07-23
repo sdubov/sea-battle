@@ -1,8 +1,7 @@
-<h3>Field Component</h3>
 <div class="field">
 
   <table>
-    <tr *ngFor="let row of field.shoots">
+    <tr *ngFor="let row of player.field.shoots">
       <td *ngFor="let col of row" (click)="onCellClick(col.x, col.y)">
         <img src="{{getImageForStatus(col.status)}}">
       </td>

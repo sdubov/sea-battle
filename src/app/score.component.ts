@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Player } from './model/player';
+import { Game } from './model/game';
 
 @Component({
   selector: 'app-score',
@@ -9,7 +9,7 @@ import { Player } from './model/player';
 
 export class ScoreComponent {
 
-  @Input() player: Player;
+  @Input() game: Game;
 
   styleScore(score: number): string {
     return (score / 10)

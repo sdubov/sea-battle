@@ -1,6 +1,6 @@
-import {Component, Input, OnInit, Output } from '@angular/core';
-import { Ship } from './model/ship';
+import { Component } from '@angular/core';
 import { ShipType } from './model/ship-type';
+import { GameService } from './service/game.service';
 
 @Component({
   selector: 'app-statistic',
@@ -8,20 +8,18 @@ import { ShipType } from './model/ship-type';
   styleUrls: [ './statistic.component.css' ]
 })
 
-export class StatisticComponent implements OnInit {
+export class StatisticComponent {
 
-  @Input() ships: Ship[];
-
-  ngOnInit(): void {
-  }
+  constructor(public gameService: GameService) { }
 
   getShipImagePath(type: ShipType): string {
     const map = {
-      0: '../assets/destroyer.png',
-      1: '../assets/submarine.png',
-      2: '../assets/cruiser.png',
-      3: '../assets/battleship.png',
-      4: '../assets/carrier.png',
+      0: '',
+      1: '../assets/destroyer.png',
+      2: '../assets/submarine.png',
+      3: '../assets/cruiser.png',
+      4: '../assets/battleship.png',
+      5: '../assets/carrier.png',
     };
 
     return map[type];

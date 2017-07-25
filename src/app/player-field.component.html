@@ -1,0 +1,13 @@
+<h3>Player Field</h3>
+
+<div class="field">
+
+  <table>
+    <tr *ngFor="let row of gameService.player.ships.shoots">
+      <td *ngFor="let cell of row" (click)="setupShip(cell.x, cell.y)">
+        <img src="{{getImageForStatus(cell.status)}}">
+      </td>
+    </tr>
+  </table>
+
+</div>

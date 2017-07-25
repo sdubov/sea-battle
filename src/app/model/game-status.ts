@@ -1,9 +1,10 @@
 export enum GameStatus {
 
-  started               = 0,
-  waiting_for_opponent  = 1,
-  in_progress           = 2,
-  waiting_for_shoot     = 3,
-  booked                = 4,
-  finished              = 5
+  none                  = 0,
+  started               = 1,
+  waiting_for_opponent  = 2,
+  set_up                = 3,
+  in_progress           = 4,
+  booked                = 5,
+  finished              = 6
 }

@@ -1,7 +1,7 @@
 <h3></h3>
 
 <div class="statistic">
-  <div *ngFor="let ship of ships">
+  <div *ngFor="let ship of gameService.player.shipStatistic">
 
     <div class="ship">
 
@@ -11,11 +11,11 @@
 
       <div class="ship-hits">
         <!-- Build hits -->
-        <div class="miss" *ngFor="let lifeIndex of [].constructor(ship.shoots)">
+        <div class="miss" *ngFor="let lifeIndex of [].constructor(ship.hits)">
           <img src="../assets/hit_small.png">
         </div>
         <!-- Build miss -->
-        <div class="miss" *ngFor="let lifeIndex of [].constructor(ship.size - ship.shoots)">
+        <div class="miss" *ngFor="let lifeIndex of [].constructor(ship.size - ship.hits)">
           <img src="../assets/miss_small.png">
         </div>
       </div>

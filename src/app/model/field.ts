@@ -7,16 +7,16 @@ export class Field {
   // Initialize all cells as 'closed' by default
   constructor() {
 
-    const stoots: Array<Array<Cell>> = [];
+    const shoots: Array<Array<Cell>> = [];
 
     for (let i = 0; i < 10; i++) {
-      stoots[i] = [];
+      shoots[i] = [];
       for (let j = 0; j < 10; j++) {
-        stoots[i][j] = new Cell(i, j);
+        shoots[i][j] = new Cell(i, j);
       }
     }
 
-    this.shoots = stoots;
+    this.shoots = shoots;
   }
 
 }

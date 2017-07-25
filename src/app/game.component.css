@@ -1,0 +1,11 @@
+.fields {
+  display: table;
+}
+
+.fields .player-field {
+  display: table-cell;
+}
+
+.fields .opponent-field {
+  display: table-cell;
+}

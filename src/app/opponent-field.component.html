@@ -1,7 +1,9 @@
+<h3>Opponent field</h3>
+
 <div class="field">
 
   <table>
-    <tr *ngFor="let row of player.field.shoots">
+    <tr *ngFor="let row of getField().shoots">
       <td *ngFor="let col of row" (click)="onCellClick(col.x, col.y)">
         <img src="{{getImageForStatus(col.status)}}">
       </td>

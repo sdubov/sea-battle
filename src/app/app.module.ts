@@ -7,15 +7,22 @@ import { HttpClientModule } from '@angular/common/http';
 
 // Components
 import { AppComponent } from './app.component';
+import { JoinComponent } from './join.component';
 import { GameComponent } from './game.component';
-import { FieldComponent } from './field.component';
+import { PlayerFieldComponent } from './player-field.component';
+import { OpponentFieldComponent } from './opponent-field.component';
 import { StatisticComponent } from './statistic.component';
 import { ScoreComponent } from './score.component';
 
 // Service
 import { BattleService } from './service/battle.service';
+import { GameService } from './service/game.service';
 import { WebSocketService } from './service/web-socket.service';
 import { StompService } from 'ng2-stomp-service';
+import { ResponseUtil } from './utils/response-util';
+
+// Routing
+import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
   imports: [
@@ -23,18 +30,23 @@ import { StompService } from 'ng2-stomp-service';
     FormsModule,
     HttpModule,
     HttpClientModule,
+    AppRoutingModule
   ],
   declarations: [
     AppComponent,
+    JoinComponent,
     GameComponent,
-    FieldComponent,
+    PlayerFieldComponent,
+    OpponentFieldComponent,
     StatisticComponent,
     ScoreComponent
   ],
   providers: [
     BattleService,
+    GameService,
     WebSocketService,
-    StompService
+    StompService,
+    ResponseUtil
   ],
   bootstrap: [ AppComponent ]
 })

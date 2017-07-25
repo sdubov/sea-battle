@@ -1,19 +1,27 @@
-<h3></h3>
-
-<div class="join" *ngIf="!player">
+<div>
+  <!-- Details -->
   <div>
-    <input [(ngModel)]="name" placeholder="name">
+    <h4>Game status:</h4>
+    <label>{{displayGameStatus()}}</label>
+    <br/>
+    <label>{{details}}</label>
   </div>
-  <button (click)="join()">Join</button>
-</div>
 
-<div *ngIf="player">
-  <h4>Game status:</h4>
-  <label>{{displayGameStatus(game.status)}}</label>
-  <br/>
-  <label>{{details}}</label>
-</div>
+  <button class="ready-button" (click)="ready()">Ready</button>
 
-<app-field [player]="player" *ngIf="player"></app-field>
-<app-score [game]="game" *ngIf="player"></app-score>
-<app-statistic [ships]="player.ships" *ngIf="player"></app-statistic>
+  <!-- Fields -->
+  <div class="fields">
+    <div class="player-field">
+      <app-player-field></app-player-field>
+    </div>
+    <div class="opponent-field" *ngIf="showOpponentField">
+      <app-opponent-field></app-opponent-field>
+    </div>
+  </div>
+
+  <!-- Score -->
+  <app-score></app-score>
+
+  <!-- Statistic -->
+  <app-statistic></app-statistic>
+</div>

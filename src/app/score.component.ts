@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Game } from './model/game';
+import {GameService} from "./service/game.service";
 
 @Component({
   selector: 'app-score',
@@ -9,7 +10,7 @@ import { Game } from './model/game';
 
 export class ScoreComponent {
 
-  @Input() game: Game;
+  constructor(public gameService: GameService) { }
 
   styleScore(score: number): string {
     return (score / 10)

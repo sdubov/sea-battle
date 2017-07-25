@@ -14,16 +14,15 @@ export class WebSocketService {
   private stomp;
   private stompSubject: Subject<any> = new Subject<any>();
 
+  // , handler: (frame) => {}
   connect(url: string): void {
 
     const self = this;
-    // ws://localhost:8080/websocket
     this.socket = new WebSocket(url);
     this.stomp = Stomp.over(this.socket);
 
     this.stomp.connect({}, function (frame) {
       self.stomp.subscribe('/topic/game-status', function (stompResponse) {
-        // alert('TADAM!');
         self.stompSubject.next(JSON.parse(stompResponse.body));
       });
     });

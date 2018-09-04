@@ -1,5 +1,7 @@
 # SeaBattle
 
+<b>IMPORTANT!</b> That project requires Backend Server. That available [here](https://github.com/sdubov/battleship-service) (Java);
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.2.1.
 
 ## Development server
